@@ -15,7 +15,7 @@ class CarModel(BaseModel):
     cm3: int = Field(..., gt=0, lt=5000)
     km: int = Field(..., gt=0, lt=500000)
     price: int = Field(..., gt=0, lt=100000)
-
+    image_url: Optional[str] = None
     # 브랜드 첫 글자 대문자
     @field_validator("brand")
     @classmethod

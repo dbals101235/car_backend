@@ -1,21 +1,12 @@
 from fastapi import FastAPI
-from motor.motor_asyncio import AsyncIOMotorClient
-from config import config
-from routers.cars import router as cars_router
+from routers import cars  # cars.py 라우터 불러오기
 
 app = FastAPI()
 
-@app.on_event("startup")
-async def startup_db_client():
-    app.mongodb_client = AsyncIOMotorClient(config.DB_URL)
-    app.database = app.mongodb_client[config.DB_NAME]
+# ✅ 차량 라우터 등록
+app.include_router(cars.router, prefix="/cars", tags=["Cars"])
 
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    app.mongodb_client.close()
-
-app.include_router(cars_router, prefix="/cars", tags=["cars"])
-
+# 기본 경로 테스트용
 @app.get("/")
-async def root():
-    return {"message": "Root working!"}
+def root():
+    return {"message": "Server is running 🚀"}
